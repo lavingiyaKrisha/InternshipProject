@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Password Reset OTP</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .header { background: linear-gradient(90deg,#4f46e5,#06b6d4); color: #fff; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+    h1 { margin: 0; font-size: 20px; }
+    .content { padding: 20px; text-align: center; }
+    .otp { font-size: 30px; color: #e74c3c; font-weight: bold; margin: 15px 0; }
+    .footer { font-size: 12px; color: #888; text-align: center; margin-top: 20px; }
+    .cta { display: inline-block; margin-top: 20px; padding: 12px 20px; background: #4f46e5; color: #fff; text-decoration: none; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Password Reset OTP</h1>
+    </div>
+    <div class="content">
+      <p>Hi,</p>
+      <p>Your OTP for password reset is:</p>
+      <div class="otp">${otp}</div>
+      <p>This OTP is valid for 10 minutes.</p>
+      <a href="#" class="cta">Do Not Share OTP</a>
+    </div>
+    <div class="footer">
+      &copy; 2025 Your Company. All rights reserved.
+    </div>
+  </div>
+</body>
+</html>
