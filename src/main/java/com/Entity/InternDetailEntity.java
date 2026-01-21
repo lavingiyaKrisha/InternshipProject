@@ -17,6 +17,15 @@ public class InternDetailEntity {
     private String collegeName;
     private String courseInfo;
     private Integer semester;
+    @Column(name = "contact_number", nullable = false)
+    private String contactNumber;
+
+	public String getContactNumber() {
+		return contactNumber;
+	}
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
+	}
 	public Integer getInternDetailId() {
 		return internDetailId;
 	}

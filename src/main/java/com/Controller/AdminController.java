@@ -1,25 +1,17 @@
 package com.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import com.Entity.InternDetailEntity;
-import com.Entity.InternshipEntity;
-import com.Entity.TechnologyEntity;
-import com.Entity.UserEntity;
-import com.Repository.InternshipRepository;
-import com.Repository.TechnologyRepository;
+import com.Entity.*;
+import com.Repository.*;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
-//    @Autowired
-//    private InternService internService;
 
     @Autowired
     private TechnologyRepository technologyRepository;
@@ -27,84 +19,71 @@ public class AdminController {
     @Autowired
     private InternshipRepository internshipRepository;
 
-    // Dashboard
-    @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    @Autowired
+    private userRepository userRepo;
 
-        // If you want lists on dashboard
-        model.addAttribute("technologies", technologyRepository.findAll());
-        model.addAttribute("internships", internshipRepository.findAll());
+    @Autowired
+    private InternDetailRepository internDetailRepo;
 
-        return "adminDashboard";
-    }
-    
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
     @GetMapping
-    public String adminHome(Model model) {
+    public String dashboard(Model model) {
         model.addAttribute("technologies", technologyRepository.findAll());
         model.addAttribute("internships", internshipRepository.findAll());
         return "adminDashboard";
     }
 
+    // ===== ADD INTERN =====
+    @GetMapping("/addIntern")
+    public String addInternPage() {
+        return "adminAddIntern";
+    }
 
-    // Add Intern
+    
     @PostMapping("/addIntern")
-    public String addIntern(UserEntity user,InternDetailEntity intern,Model model) {
+    public String addIntern(UserEntity user,
+                            InternDetailEntity intern,
+                            Model model) {
 
-//        internService.addIntern(user, intern);
+        user.setRole("INTERN");
+        user.setPassword(encoder.encode(user.getPassword()));
+        userRepo.save(user);
+
+        intern.setUser(user);
+        internDetailRepo.save(intern);
 
         model.addAttribute("msg", "Intern added successfully");
-
-        // reload dashboard data
-        model.addAttribute("technologies", technologyRepository.findAll());
-        model.addAttribute("internships", internshipRepository.findAll());
-
-        return "adminDashboard";
+        return "redirect:/admin";
     }
 
-    
+    // ===== TECHNOLOGY =====
     @GetMapping("/addTechnology")
-    public String showAddTechnologyForm(Model model) {
+    public String showTechnology(Model model) {
         model.addAttribute("technologies", technologyRepository.findAll());
-        return "adminTechnology"; // JSP page name
+        return "adminTechnology";
     }
 
-    // Add Technology
     @PostMapping("/addTechnology")
-    public String addTechnology(TechnologyEntity tech, Model model) {
-
+    public String addTechnology(TechnologyEntity tech) {
         tech.setActive(true);
         technologyRepository.save(tech);
-
-        model.addAttribute("msg", "Technology added successfully");
-
-        model.addAttribute("technologies", technologyRepository.findAll());
-        model.addAttribute("internships", internshipRepository.findAll());
-
-        return "adminDashboard";
+        return "redirect:/admin/addTechnology";
     }
-    
-    @GetMapping("/internship")
-    public String manageInternship(Model model) {
 
+    // ===== INTERNSHIP =====
+    @GetMapping("/internship")
+    public String internshipPage(Model model) {
         model.addAttribute("technologies", technologyRepository.findAll());
         model.addAttribute("internships", internshipRepository.findAll());
-
         return "adminInternship";
     }
 
-
-    // Add Internship
     @PostMapping("/addInternship")
-    public String addInternship(InternshipEntity internship,Model model) {
-
+    public String addInternship(InternshipEntity internship) {
         internship.setActive(true);
         internshipRepository.save(internship);
-
-        model.addAttribute("msg", "Internship added successfully");
-
-        model.addAttribute("technologies", technologyRepository.findAll());
-        model.addAttribute("internships", internshipRepository.findAll());
-
-        return "adminInternship";
+        return "redirect:/admin/internship";
     }
 }

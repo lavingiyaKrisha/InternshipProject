@@ -8,22 +8,18 @@ public class TechnologyEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")        // ✅ MUST MATCH DB
+    @Column(name = "id")
     private Integer technologyId;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(name = "description")
     private String description;
-
-    @Column(name = "logo")
     private String logo;
-
-    @Column(name = "active")
     private Boolean active;
 
-    // getters & setters
+    // ===== GETTERS & SETTERS =====
+
     public Integer getTechnologyId() {
         return technologyId;
     }
@@ -40,6 +36,14 @@ public class TechnologyEntity {
         this.name = name;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -54,13 +58,5 @@ public class TechnologyEntity {
 
     public void setLogo(String logo) {
         this.logo = logo;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 }
