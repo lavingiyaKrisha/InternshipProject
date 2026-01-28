@@ -15,6 +15,8 @@ import com.Service.MailService;
 import com.Spring25InternshipProjectApplication;
 import com.cloudinary.Cloudinary;
 
+import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 public class SessionController {
@@ -65,7 +67,7 @@ public class SessionController {
 
 	
 	 @PostMapping("/login-process")
-	 public String loginProcess(String email, String password, Map<String, Object> model) {
+	 public String loginProcess(String email, String password, HttpSession session,Map<String, Object> model) {
 
 	     UserEntity user = userRepo.findByEmail(email);
 
@@ -73,19 +75,21 @@ public class SessionController {
 	         model.put("error", "Email not found");
 	         return "login";
 	     }
-
+	     
 	     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 	     if (!encoder.matches(password, user.getPassword())) {
 	         model.put("error", "Incorrect password");
 	         return "login";
 	     }
-
+	     
+	     session.setAttribute("user",user);
 	     if ("Admin".equalsIgnoreCase(user.getRole())) {
-	    	 return "forward:/admin";
-  
-	     } else {
-	         return "internDashboard"; 
-	     }
+	    	    return "redirect:/adminDashboard";
+	    	} else {
+	    	    // If internDashboard is a JSP, this stays as is. 
+	    	    // If it's a URL mapping, use return "redirect:/dashboard";
+	    	    return "careerPortal"; 
+	    	}
 	 }
 
 	
@@ -122,6 +126,20 @@ public class SessionController {
 	    return "resetPassword";
 	}
 
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+	    // 1️⃣ Clear all session data
+	    session.invalidate(); 
+	    
+	    // 2️⃣ Redirect back to the login page
+	    return "redirect:/login"; 
+	}
 	
 }
+
+
+
+
+
+
 

@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import com.Entity.*;
 import com.Repository.*;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
-@RequestMapping("/admin")
+
 public class AdminController {
 
     @Autowired
@@ -28,8 +30,11 @@ public class AdminController {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    @GetMapping
-    public String dashboard(Model model) {
+    @GetMapping("/adminDashboard")
+    public String dashboard(Model model,HttpSession session) {
+    	
+    	UserEntity admin = (UserEntity) session.getAttribute("user");
+        model.addAttribute("admin", admin);
         model.addAttribute("technologies", technologyRepository.findAll());
         model.addAttribute("internships", internshipRepository.findAll());
         return "adminDashboard";
@@ -55,7 +60,7 @@ public class AdminController {
         internDetailRepo.save(intern);
 
         model.addAttribute("msg", "Intern added successfully");
-        return "redirect:/admin";
+        return "redirect:/adminDashboard";
     }
 
     // ===== TECHNOLOGY =====
@@ -69,7 +74,7 @@ public class AdminController {
     public String addTechnology(TechnologyEntity tech) {
         tech.setActive(true);
         technologyRepository.save(tech);
-        return "redirect:/admin/addTechnology";
+        return "redirect:/addTechnology";
     }
 
     // ===== INTERNSHIP =====
@@ -84,6 +89,6 @@ public class AdminController {
     public String addInternship(InternshipEntity internship) {
         internship.setActive(true);
         internshipRepository.save(internship);
-        return "redirect:/admin/internship";
+        return "redirect:/internship";
     }
 }

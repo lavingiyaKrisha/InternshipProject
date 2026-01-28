@@ -18,13 +18,13 @@ public class InternDetailEntity {
     private String courseInfo;
     private Integer semester;
     @Column(name = "contact_number", nullable = false)
-    private String contactNumber;
+    private String contactNum;
 
 	public String getContactNumber() {
-		return contactNumber;
+		return contactNum;
 	}
-	public void setContactNumber(String contactNumber) {
-		this.contactNumber = contactNumber;
+	public void setContactNumber(String contactNum) {
+		this.contactNum = contactNum;
 	}
 	public Integer getInternDetailId() {
 		return internDetailId;
